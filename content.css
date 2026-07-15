@@ -1,0 +1,56 @@
+html.jsonpeek-active,
+html.jsonpeek-active body {
+  margin: 0;
+  background: #0b0f17;
+  color: #e5e7eb;
+  font: 13px/1.6 ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+#jp-toolbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  background: #111827;
+  border-bottom: 1px solid #1f2937;
+  z-index: 10;
+}
+#jp-toolbar strong { color: #60a5fa; font-family: ui-sans-serif, system-ui, sans-serif; }
+#jp-search {
+  flex: 1;
+  background: #0b0f17;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font: inherit;
+}
+#jp-toolbar button {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+#jp-toolbar button:hover { background: #374151; }
+
+#jp-tree { padding: 14px 18px; }
+.jp-node { margin-left: 6px; }
+.jp-node > summary { cursor: pointer; list-style: none; }
+.jp-node > summary::-webkit-details-marker { display: none; }
+.jp-node > summary::before { content: "▸"; color: #6b7280; display: inline-block; width: 1em; }
+.jp-node[open] > summary::before { content: "▾"; }
+.jp-children { margin-left: 18px; border-left: 1px solid #1f2937; padding-left: 10px; }
+.jp-close { color: #6b7280; }
+.jp-row { margin-left: 18px; }
+.jp-key { color: #93c5fd; }
+.jp-str { color: #86efac; }
+.jp-num { color: #fbbf24; }
+.jp-bool { color: #f472b6; }
+.jp-null { color: #9ca3af; font-style: italic; }
+.jp-count { color: #6b7280; font-size: 11px; }
+#jp-rawpre { white-space: pre; color: #e5e7eb; }

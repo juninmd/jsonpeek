@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "jsonpeek",
+  "version": "1.0.0",
+  "description": "Pretty-print, collapse and search raw JSON API responses right in the browser tab.",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "jsonpeek — JSON viewer"
+  }
+}
