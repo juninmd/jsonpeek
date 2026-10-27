@@ -48,3 +48,34 @@ test("XSS in values is escaped, not executed", () => {
   expect(html).not.toContain("<script>alert");
   expect(html).toContain("&lt;script&gt;");
 });
+
+test("escapeHtml also escapes single quotes and backticks", () => {
+  expect(escapeHtml("'")).toBe("&#39;");
+  expect(escapeHtml("`")).toBe("&#96;");
+  expect(lib.escapeAttr("a'b")).toBe("a&#39;b");
+});
+
+test("malicious object keys are escaped", () => {
+  const html = buildJsonTree({ "<img src=x onerror=alert(1)>": 1, "a'\"b": 2 });
+  expect(html).not.toContain("<img");
+  expect(html).toContain("&lt;img");
+  expect(html).toContain("a&#39;&quot;b");
+});
+
+test("closing tags inside values cannot break out of the tree", () => {
+  const html = buildJsonTree({ v: "</details></div><b>x" });
+  expect(html).not.toContain("<b>");
+  expect(html.match(/<\/details>/g)?.length).toBe(1);
+});
+
+test("__proto__ key is rendered as a normal key", () => {
+  const html = buildJsonTree(JSON.parse('{"__proto__":{"x":1}}'));
+  expect(html).toContain('class="jp-key">__proto__');
+});
+
+test("bidi overrides and control chars render as visible escapes", () => {
+  const html = buildJsonTree({ k: "a‮b\u0007" });
+  expect(html).not.toContain("‮");
+  expect(html).toContain("a\\u202eb\\u0007");
+  expect(escapeHtml("😀")).toBe("😀");
+});

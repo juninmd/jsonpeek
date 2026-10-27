@@ -7,9 +7,19 @@ function classify(v) {
   return typeof v; // "object" | "string" | "number" | "boolean"
 }
 
+const HTML_ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "`": "&#96;" };
+
+// Escapes HTML-significant chars (incl. ' and `, so it is also safe inside
+// single-quoted attributes) and shows invisible control / bidi-override chars
+// as visible \uXXXX text to avoid visual spoofing of values.
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  return String(s)
+    .replace(/[&<>"'`]/g, (c) => HTML_ESC[c])
+    .replace(/[\u0000-\u001f\u007f\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`);
 }
+
+// MUST be used for any JSON-derived text placed in an HTML attribute.
+const escapeAttr = escapeHtml;
 
 function leaf(v) {
   const t = classify(v);
@@ -41,5 +51,5 @@ function buildJsonTree(value, key) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { classify, escapeHtml, leaf, buildJsonTree };
+  module.exports = { classify, escapeHtml, escapeAttr, leaf, buildJsonTree };
 }
